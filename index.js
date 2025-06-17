@@ -73,7 +73,7 @@ async function start() {
   });
 
   server.listen(port, () => {
-    console.log(`jhub-connect proxy running on http://localhost:${port}`);
+    console.log(`jupyter-web-proxy running on http://localhost:${port}`);
     console.log(`Proxying to ${jupyterUrl}`);
   });
 }
