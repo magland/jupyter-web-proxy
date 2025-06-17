@@ -1,6 +1,6 @@
 # jupyter-web-proxy
 
-A CLI proxy to securely connect web applications to Jupyter servers via HTTP and WebSocket connections.
+Securely connect web applications to Jupyter servers via HTTP and WebSocket connections.
 
 ## Installation
 
@@ -27,16 +27,8 @@ jupyter-web-proxy <jupyter-url> -t <token> [options]
 ### Example
 
 ```bash
-jupyter-web-proxy https://hub.dandiarchive.org/user/myname -t abc123 -p 8020 -o https://nbfiddle.org
+jupyter-web-proxy https://hub.dandiarchive.org/user/myname -t abc123 -p 8010 -o https://nbfiddle.org
 ```
-
-## Features
-
-- HTTP and WebSocket proxy support
-- Token-based authentication
-- Configurable CORS origins
-- Error handling for proxy requests
-- Secure connection management
 
 ## Technical Details
 
@@ -49,4 +41,4 @@ The proxy:
 
 ## License
 
-MIT
+Apache License 2.0
