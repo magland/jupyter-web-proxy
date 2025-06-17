@@ -1,0 +1,17 @@
+{
+    "name": "jupyter-web-proxy",
+    "version": "1.0.0",
+    "description": "A CLI proxy to securely connect web apps to jupyter servers via HTTP and WebSocket.",
+    "bin": {
+        "jupyter-web-proxy": "./index.js"
+    },
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Jeremy Magland",
+    "license": "MIT",
+    "dependencies": {
+        "commander": "^14.0.0",
+        "http-proxy": "^1.18.1"
+    }
+}
