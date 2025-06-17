@@ -10,7 +10,7 @@ program
   .option("-p, --port <port>", "Local proxy port. Default is 8010", "8010")
   .option(
     "-o, --allowed-origins <origins>",
-    "Comma-separated list of allowed CORS origins. For example, https://nbfiddle.org"
+    "Comma-separated list of allowed CORS origins. For example, https://nbfiddle.app"
   )
   .parse(process.argv);
 
@@ -24,7 +24,7 @@ async function start() {
   const proxy = httpProxy.createProxyServer({
     target: `${jupyterUrl}`,
     changeOrigin: true,
-    secure: false,
+    secure: true,
     ws: true
   });
 
@@ -69,6 +69,10 @@ async function start() {
       proxyRes.headers["Access-Control-Allow-Methods"] =
         "GET, POST, PUT, DELETE, OPTIONS";
       proxyRes.headers["Access-Control-Allow-Credentials"] = "true";
+    }
+    else {
+      // do not allow CORS for this origin
+      proxyRes.headers["Access-Control-Allow-Origin"] = "null";
     }
   });
 

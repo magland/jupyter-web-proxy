@@ -1,6 +1,6 @@
 # jupyter-web-proxy
 
-Securely connect web applications to Jupyter servers via HTTP and WebSocket connections.
+A proxy tool designed for web applications like nbfiddle and dandiset-explorer to connect to JupyterHub resources (such as dandihub). It securely manages HTTP and WebSocket connections between web applications and Jupyter servers.
 
 ## Installation
 

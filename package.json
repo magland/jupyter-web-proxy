@@ -1,6 +1,6 @@
 {
     "name": "jupyter-web-proxy",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A CLI proxy to securely connect web apps to jupyter servers via HTTP and WebSocket.",
     "bin": {
         "jupyter-web-proxy": "./index.js"
