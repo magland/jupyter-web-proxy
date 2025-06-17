@@ -24,10 +24,30 @@ jupyter-web-proxy <jupyter-url> -t <token> [options]
 - `-p, --port`: Local proxy port (default: 8010)
 - `-o, --allowed-origins`: Comma-separated list of allowed CORS origins (e.g., https://nbfiddle.org)
 
-### Example
+### Examples
 
 ```bash
+# Basic usage with nbfiddle.org
 jupyter-web-proxy https://hub.dandiarchive.org/user/myname -t abc123 -p 8010 -o https://nbfiddle.org
+
+# Usage with multiple allowed origins
+jupyter-web-proxy https://hub.dandiarchive.org/user/<user> -t <token> -o https://nbfiddle.app,https://dandi-ai-notebooks.github.io
+```
+
+### Getting a JupyterHub API Token
+
+To obtain an API token from JupyterHub:
+1. Log in to your JupyterHub instance (e.g., https://hub.dandiarchive.org)
+2. Click on "File" > "Hub Control Panel"
+3. Go to the "Token" or "API Tokens" section
+4. Click "Generate Token" and copy the generated token
+
+### Web Application Configuration
+
+By default, the proxy runs on port 8010. You can change this using the `-p` option. In your web application (e.g., nbfiddle.app), configure it to connect to:
+
+```
+http://localhost:8010
 ```
 
 ## Technical Details
