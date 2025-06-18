@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const http = require("http");
+const https = require("https");
 const httpProxy = require("http-proxy");
 const { program } = require("commander");
 
@@ -21,6 +22,8 @@ const port = parseInt(options.port, 10);
 const allowedOrigins = options.allowedOrigins.split(",").map((o) => o.trim());
 
 async function start() {
+  await checkServerRunning();
+
   const proxy = httpProxy.createProxyServer({
     target: `${jupyterUrl}`,
     changeOrigin: true,
@@ -79,6 +82,60 @@ async function start() {
   server.listen(port, () => {
     console.log(`jupyter-web-proxy running on http://localhost:${port}`);
     console.log(`Proxying to ${jupyterUrl}`);
+  });
+}
+
+async function checkServerRunning() {
+  // jupyterUrl is for example https://hhmi.2i2c.cloud/user/magland
+  // we want to get user name and base URL
+  const url = new URL(jupyterUrl);
+  const username = url.pathname.split("/")[2];
+  const baseUrl = `${url.protocol}//${url.host}`;
+  const a = `${baseUrl}/hub/api/users/${username}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  };
+  const resp = await getJson(a, headers);
+  if (!resp || !resp.servers) {
+    throw new Error(`Unable to get server information for user ${username} at ${baseUrl}`);
+  }
+  const servers = resp.servers;
+  if (Object.keys(servers).length === 0) {
+    throw new Error(`No active servers found for user ${username} at ${baseUrl}`);
+  }
+  const firstServer = servers[Object.keys(servers)[0]];
+  const started = firstServer.started;
+  const last_activity = firstServer.last_activity;
+  if (!started) {
+    console.info(`Server for user ${username} at ${baseUrl} is not started yet.`);
+    console.info(jupyterUrl);
+    return;
+  }
+  if (last_activity) {
+    console.log(`Last activity for server: ${last_activity}`);
+  }
+  console.log(`Server for user ${username} at ${baseUrl} is running.`);
+  console.log(jupyterUrl);
+}
+
+async function getJson(url, headers) {
+  return new Promise((resolve, reject) => {
+    https.get(url, { headers }, (res) => {
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        if (res.statusCode === 200) {
+          resolve(JSON.parse(data));
+        } else {
+          reject(new Error(`Request failed with status code ${res.statusCode}`));
+        }
+      });
+    }).on("error", (err) => {
+      reject(err);
+    });
   });
 }
 
