@@ -22,7 +22,21 @@ const port = parseInt(options.port, 10);
 const allowedOrigins = options.allowedOrigins.split(",").map((o) => o.trim());
 
 async function start() {
-  await checkServerRunning();
+  while (true) {
+    try {
+      await checkServerRunning();
+      break; // Exit the loop if the server is running
+    }
+    catch (err) {
+      console.error("Error checking server status:", err.message);
+      // wait for user to press enter
+      console.log(`Try to start the server at ${jupyterUrl}`);
+      console.log("Press Enter to retry or Ctrl+C to exit...");
+      await new Promise((resolve) => {
+        process.stdin.once("data", resolve);
+      });
+    }
+  }
 
   const proxy = httpProxy.createProxyServer({
     target: `${jupyterUrl}`,
